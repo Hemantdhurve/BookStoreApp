@@ -1,5 +1,6 @@
 ﻿using CommonLayer.Modal;
 using CommonLayer.Model;
+using Microsoft.EntityFrameworkCore.Metadata.Internal;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using RepositoryLayer.Interface;
@@ -17,6 +18,7 @@ namespace RepositoryLayer.Service
     public class UserRL:IUserRL
     {
         private readonly IConfiguration iconfiguration;
+        public static string Key = "hemanT15893@asd";
         public UserRL(IConfiguration iconfiguration)
         {
                 this.iconfiguration= iconfiguration;
@@ -36,11 +38,11 @@ namespace RepositoryLayer.Service
 
                     cmd.Parameters.AddWithValue("@FullName", userRegistrationModel.FullName);
                     cmd.Parameters.AddWithValue("@EmailId", userRegistrationModel.EmailId);
-                    cmd.Parameters.AddWithValue("@Password", userRegistrationModel.Password);
+                    cmd.Parameters.AddWithValue("@Password", ConvertToEncrypt(userRegistrationModel.Password));
                     cmd.Parameters.AddWithValue("@MobileNumber", userRegistrationModel.MobileNumber);
 
                     con.Open();
-                    int result = cmd.ExecuteNonQuery();
+                    var result = cmd.ExecuteNonQuery();
                     if (result != 0)
                     {
                         return userRegistrationModel;
@@ -66,13 +68,15 @@ namespace RepositoryLayer.Service
                     SqlCommand cmd = new SqlCommand("SPLogin", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@EmailId", userLoginModel.EmailId);
-                    cmd.Parameters.AddWithValue("@Password", userLoginModel.Password);
-
+                    cmd.Parameters.AddWithValue("@Password", ConvertToEncrypt(userLoginModel.Password));
+                    //var decryptPass = ConvertToDecrypt(pass.Password);
                     con.Open();
                     var result = cmd.ExecuteNonQuery();
+                   
                     if (result != 0)
                     {
-                        return GenerateSecurityToken(userLoginModel.EmailId);
+                        var token = GenerateSecurityToken(userLoginModel.EmailId);
+                        return token;
                     }
                     else
                     {
@@ -88,7 +92,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public string GenerateSecurityToken(string email)
+        public string GenerateSecurityToken(string emailId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(iconfiguration["JWT:Key"]);
@@ -96,13 +100,96 @@ namespace RepositoryLayer.Service
             {
                 Subject = new ClaimsIdentity(new[] 
                 { 
-                    new Claim("EmailId", email) 
+                    new Claim("EmailId", emailId) 
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
+        }
+
+        public static string ConvertToEncrypt(string password)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(password))
+                {
+                    return "";
+                }
+
+                password += Key;
+
+                var passwordBytes = Encoding.UTF8.GetBytes(password);
+                return Convert.ToBase64String(passwordBytes);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
+        }
+
+        public static string ConvertToDecrypt(string base64EncodeData)
+        {
+            try
+            {
+                if (string.IsNullOrEmpty(base64EncodeData))
+                {
+                    return "";
+                }
+                   
+                var base64EncodeBytes = Convert.FromBase64String(base64EncodeData);
+
+                var result = Encoding.UTF8.GetString(base64EncodeBytes);
+                result = result.Substring(0, result.Length - Key.Length);
+                return result;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+           
+        }
+
+
+        public string ForgetPassword(string emailId)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPForgotPass", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@EmailId", emailId);
+                    con.Open();
+
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            emailId = Convert.ToString(dataReader["EmailId"] == DBNull.Value ? default : dataReader["EmailId"]);
+                        }
+                        var token = this.GenerateSecurityToken(emailId);
+                        MSMQ msmq = new MSMQ();
+                        msmq.sendData2Queue(token);
+
+                        return token;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch (Exception e)
+                {
+                    throw e;
+                }
+            }
+
         }
     }
 }

@@ -23,7 +23,7 @@ namespace RepositoryLayer.Service
         {
                 this.iconfiguration= iconfiguration;
         }
-        public static SqlConnection con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreApp;Integrated Security=True;");
+        public SqlConnection con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreApp;Integrated Security=True;");
 
         public UserRegistrationModel Registration(UserRegistrationModel userRegistrationModel)
         {
@@ -153,8 +153,6 @@ namespace RepositoryLayer.Service
             }
            
         }
-
-
         public string ForgetPassword(string emailId)
         {
             using (con)
@@ -191,5 +189,49 @@ namespace RepositoryLayer.Service
             }
 
         }
+
+        public string ResetPassword(string emailId, string newPassword, string confirmPassword)
+        {
+            using (con)
+            {
+                try
+                {
+                    if(newPassword.Equals(confirmPassword))
+                    {
+
+                        SqlCommand cmd = new SqlCommand("SPResetPassword", con);
+                        cmd.CommandType = CommandType.StoredProcedure;
+                        cmd.Parameters.AddWithValue("@EmailId", emailId);
+                        cmd.Parameters.AddWithValue("@Password", ConvertToEncrypt(newPassword));
+                        con.Open();
+
+                        SqlDataReader dataReader=cmd.ExecuteReader();
+
+                        if (dataReader.HasRows)
+                        {
+                            while (dataReader.Read())
+                            {
+                                emailId = Convert.ToString(dataReader["EmailId"] == DBNull.Value ? default : dataReader["EmailId"]);
+                                newPassword = Convert.ToString(dataReader["Password"] == DBNull.Value ? default : dataReader["Password"]);
+                            }
+                            return emailId;
+                        }
+                        return emailId;
+
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
+
     }
 }

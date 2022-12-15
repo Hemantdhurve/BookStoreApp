@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Modal;
+using CommonLayer.Model;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -19,6 +20,18 @@ namespace BusinessLayer.Service
             try
             {
                 return iuserRL.Registration(userRegistrationModel);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+        public string Login(UserLoginModel userLoginModel)
+        {
+            try
+            {
+                return iuserRL.Login(userLoginModel);
             }
             catch (Exception)
             {

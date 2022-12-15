@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Modal;
+using CommonLayer.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,30 @@ namespace BookStoreApp.Controllers
                 else
                 {
                     return BadRequest(new { success = false, message = "Registration is UnSuccessful" });
+                }
+
+            }
+            catch (System.Exception e)
+            {
+                throw e;
+            }
+        }
+
+        [HttpPost]
+        [Route("Login")]
+        public IActionResult Login(UserLoginModel userLoginModel)
+        {
+            try
+            {
+                var result = iuserBL.Login(userLoginModel);
+
+                if (result != null)
+                {
+                    return Ok(new { success = true, message = "Login is Successful", data = result });
+                }
+                else
+                {
+                    return BadRequest(new { success = false, message = "Login is UnSuccessful" });
                 }
 
             }

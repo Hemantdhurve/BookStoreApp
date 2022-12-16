@@ -62,5 +62,28 @@ namespace BookStoreApp.Controllers
                 throw;
             }
         }
+
+        [HttpGet]
+        [Route("RetriveAll")]
+        public IActionResult RetriveAllBooks()
+        {
+            try
+            {
+                var result = ibookBL.RetriveAllBooks();
+                if (result != null)
+
+                {
+                    return this.Ok(new { Success = true, message = "Successfully Retrived All Books", Response = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Books Retrive UnSuccessful" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

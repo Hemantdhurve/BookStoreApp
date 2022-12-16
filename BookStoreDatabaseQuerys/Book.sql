@@ -53,3 +53,11 @@ as
 		select * from BookTable where @BookId=BookId
 	end
 
+
+--Create store procedure to retrive All the Books
+
+create procedure SPRetriveAllBooks
+as
+	begin
+		select * from BookTable;
+	end

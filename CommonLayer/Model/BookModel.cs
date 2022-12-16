@@ -7,6 +7,8 @@ namespace CommonLayer.Model
 {
     public class BookModel
     {
+        [Key]
+        public long BookId { get; set; }
         public string BookTitle { get; set; }        
         public string Author { get; set; }
         public float Rating { get; set; }

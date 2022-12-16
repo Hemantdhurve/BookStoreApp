@@ -44,4 +44,12 @@ as
 		)
 	end
 
-	 
+-- Create Store Procedure for the Retrive Book By Id
+
+create or alter procedure SPRetriveBookById
+(	@BookId int  )
+as
+	begin
+		select * from BookTable where @BookId=BookId
+	end
+

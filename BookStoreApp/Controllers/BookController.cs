@@ -36,6 +36,29 @@ namespace BookStoreApp.Controllers
             }
             catch (Exception ex)
             {
+                throw ex;
+            }
+        }
+
+        [HttpGet]
+        [Route("RetriveById")]
+        public IActionResult RetriveBookById(long BookId)
+        {
+            try
+            {
+                var result = ibookBL.RetriveBookById(BookId);
+                if (result != null)
+
+                {
+                    return this.Ok(new { Success = true, message = "Book Details Retrived", Response = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Book Details not Retrived" });
+                }
+            }
+            catch (Exception)
+            {
                 throw;
             }
         }

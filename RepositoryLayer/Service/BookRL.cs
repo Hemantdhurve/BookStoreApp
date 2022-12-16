@@ -19,7 +19,7 @@ namespace RepositoryLayer.Service
             this.iconfiguration = iconfiguration;
         }
         public SqlConnection con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreApp;Integrated Security=True;");
-
+        public BookModel bookModel = new BookModel();
         public BookModel AddBook(BookModel bookModel)
         {
             using (con)
@@ -58,5 +58,44 @@ namespace RepositoryLayer.Service
             }
 
         }
+        public BookModel RetriveBookById(long BookId)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPRetriveBookById", con);
+                    cmd.CommandType= CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    con.Open();
+                    SqlDataReader dataReader= cmd.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        while(dataReader.Read())
+                        {
+                            bookModel.BookTitle = dataReader["BookTitle"].ToString();
+                            bookModel.Author= dataReader["Author"].ToString();
+                            bookModel.Rating = Convert.ToInt32(dataReader["Rating"]);
+                            bookModel.RatedCount = Convert.ToInt64(dataReader["RatedCount"]);
+                            bookModel.DiscountedPrice = Convert.ToInt64(dataReader["DiscountedPrice"]);
+                            bookModel.ActualPrice = Convert.ToInt64(dataReader["ActualPrice"]);
+                            bookModel.Description = dataReader["Description"].ToString();
+                            bookModel.Image = dataReader["Image"].ToString();
+                        }
+                        return bookModel;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
+
     }
 }

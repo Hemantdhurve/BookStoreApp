@@ -20,10 +20,22 @@ namespace BusinessLayer.Service
 			{
 				return ibookRL.AddBook(bookModel);
 			}
-			catch (Exception)
+			catch (Exception e)
 			{
 
-				throw;
+				throw e;
+			}
+        }
+        public BookModel RetriveBookById(long BookId)
+        {
+			try
+			{
+				return ibookRL.RetriveBookById(BookId);
+			}
+			catch (Exception e)
+			{
+
+				throw e;
 			}
         }
     }

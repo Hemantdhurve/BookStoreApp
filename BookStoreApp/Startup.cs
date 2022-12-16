@@ -35,15 +35,14 @@ namespace BookStoreApp
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            //services.AddDbContext<BookStoreContext>(options =>
-            //{
-            //    options.UseSqlServer(Configuration.GetConnectionString("BookStoreApp"));
-            //});
+            //services.AddDbContext<BookStoreContext>(opts => opts.UseSqlServer(Configuration["ConnectionString:BookStoreApp"]));
 
             services.AddControllers();
 
             services.AddTransient<IUserBL, UserBL>();
             services.AddTransient<IUserRL, UserRL>();
+            services.AddTransient<IAdminRL, AdminRL>();
+            services.AddTransient<IAdminBL, AdminBL>();
 
             //swagger implementation
             services.AddSwaggerGen();
@@ -109,10 +108,11 @@ namespace BookStoreApp
                 app.UseDeveloperExceptionPage();
             }
 
-            app.UseHttpsRedirection();
-        app.UseAuthentication();
+            app.UseHttpsRedirection();        
 
-        app.UseRouting();
+            app.UseRouting();
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 

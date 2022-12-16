@@ -100,7 +100,10 @@ namespace RepositoryLayer.Service
             {
                 Subject = new ClaimsIdentity(new[] 
                 { 
-                    new Claim("EmailId", emailId) 
+                    //Added Role claim for the user
+                    new Claim(ClaimTypes.Role,"User"),
+                    new Claim("EmailId", emailId)
+                    
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
@@ -169,7 +172,16 @@ namespace RepositoryLayer.Service
                     {
                         while (dataReader.Read())
                         {
-                            emailId = Convert.ToString(dataReader["EmailId"] == DBNull.Value ? default : dataReader["EmailId"]);
+                            //emailId = Convert.ToString(dataReader["EmailId"] == DBNull.Value ? default : dataReader["EmailId"]);
+                            if(dataReader["EmailId"] == DBNull.Value)
+                            {
+                                return default;
+                            }
+                            else
+                            {
+                                emailId = Convert.ToString(dataReader["EmailId"]);
+                                return emailId;
+                            }
                         }
                         var token = this.GenerateSecurityToken(emailId);
                         MSMQ msmq = new MSMQ();
@@ -211,6 +223,7 @@ namespace RepositoryLayer.Service
                         {
                             while (dataReader.Read())
                             {
+                                // DBNull.Value can be used to explicitly assign a nonexistent value to a database field
                                 emailId = Convert.ToString(dataReader["EmailId"] == DBNull.Value ? default : dataReader["EmailId"]);
                                 newPassword = Convert.ToString(dataReader["Password"] == DBNull.Value ? default : dataReader["Password"]);
                             }

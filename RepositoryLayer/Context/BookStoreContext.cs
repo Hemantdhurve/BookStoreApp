@@ -5,9 +5,9 @@ using System.Text;
 
 namespace RepositoryLayer.Context
 {
-    public class BookStoreContext
+    public class BookStoreContext: DbContext
     {
-        public BookStoreContext(DbContextOptions options) : base()
+        public BookStoreContext(DbContextOptions options) : base(options)
 
         {
         }

@@ -8,5 +8,6 @@ namespace BusinessLayer.Interface
     public interface ICartBL
     {
         public CartModel AddCart(CartModel cartModel, long UserId);
+        public IEnumerable<CartModel> RetriveCart(long UserId);
     }
 }

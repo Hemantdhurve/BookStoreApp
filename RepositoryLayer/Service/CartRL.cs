@@ -9,7 +9,7 @@ using System.Text;
 
 namespace RepositoryLayer.Service
 {
-    public class CartRL:ICartRL
+    public class CartRL : ICartRL
     {
         private readonly IConfiguration iconfiguration;
 
@@ -32,7 +32,7 @@ namespace RepositoryLayer.Service
                     cmd.Parameters.AddWithValue("@BookQuantity", cartModel.BookQuantity);
                     con.Open();
                     var result = cmd.ExecuteNonQuery();
-                    if(result !=0 )
+                    if (result != 0)
                     {
                         return cartModel;
                     }
@@ -48,6 +48,45 @@ namespace RepositoryLayer.Service
                 }
             }
 
+        }
+        public IEnumerable<CartModel> RetriveCart(long UserId)
+        {
+            List<CartModel> cartList = new List<CartModel>();
+            try
+            {
+                using (con)
+                {
+
+                    SqlCommand cmd = new SqlCommand("SPRetriveAllCart", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", UserId);
+                    con.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            cartList.Add(new CartModel()
+                            {
+                                CartId = Convert.ToInt64(dataReader["CartId"]),
+                                BookId = Convert.ToInt64(dataReader["BookId"]),
+                                UserId = Convert.ToInt64(dataReader["UserId"]),
+                                BookQuantity = Convert.ToInt64(dataReader["BookQuantity"])
+                            });
+                        }
+                        return cartList;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                    
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
         }
     }
 }

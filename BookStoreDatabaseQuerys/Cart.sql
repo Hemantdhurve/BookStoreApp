@@ -26,3 +26,11 @@ as
 			end
 	end
 
+--Create stored procedure for the Retrive All
+
+create procedure SPRetriveAllCart( @UserId int)
+as
+	begin
+		select * from CartTable where UserId=@UserId
+	end
+go

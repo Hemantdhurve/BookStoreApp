@@ -1,6 +1,7 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model;
 using RepositoryLayer.Interface;
+using RepositoryLayer.Service;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -27,5 +28,17 @@ namespace BusinessLayer.Service
 				throw;
 			}
         }
+        public IEnumerable<CartModel> RetriveCart(long UserId)
+		{
+			try
+			{
+                return icartRL.RetriveCart(UserId);
+            }
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
     }
 }

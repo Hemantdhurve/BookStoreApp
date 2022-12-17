@@ -42,5 +42,29 @@ namespace BookStoreApp.Controllers
                 throw e;
             }
         }
+
+        [HttpGet]
+        [Route("RetriveCart")]
+        public IActionResult RetriveCart()
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                var result = icartBL.RetriveCart(userId);
+                if (result != null)
+                {
+                    return this.Ok(new { success = true, message = "Retrive Cart Successful", data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Retrive Cart Unsuccessful" });
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
     }
 }

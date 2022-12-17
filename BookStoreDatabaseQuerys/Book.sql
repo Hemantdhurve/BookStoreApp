@@ -90,3 +90,12 @@ as
 			Image=@Image
 		where BookId=@BookId
 	end
+
+-- Create store procedure for Delete Book
+
+create procedure SPBookDelete @BookId int
+as 
+	begin 
+		delete from BookTable where BookId=@BookId
+	end
+

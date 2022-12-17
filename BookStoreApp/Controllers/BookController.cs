@@ -108,5 +108,28 @@ namespace BookStoreApp.Controllers
                 throw;
             }
         }
+
+        [HttpDelete]
+        [Route("DeleteBook")]
+        public IActionResult DeleteBook(long BookId)
+        {
+            try
+            {
+                var result = ibookBL.DeleteBook(BookId);
+                if (result != null)
+
+                {
+                    return this.Ok(new { Success = true, message = "Books Deleted Successfully"});
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Books Deletion UnSuccessful" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

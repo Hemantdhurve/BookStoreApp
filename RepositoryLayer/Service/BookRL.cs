@@ -182,5 +182,33 @@ namespace RepositoryLayer.Service
             }
 
         }
+        public bool DeleteBook(long BookId)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPBookDelete", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    con.Open();
+                    var result = cmd.ExecuteNonQuery();
+                    if(result != 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
     }
 }

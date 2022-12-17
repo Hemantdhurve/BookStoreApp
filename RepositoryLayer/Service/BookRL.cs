@@ -59,7 +59,7 @@ namespace RepositoryLayer.Service
             }
 
         }
-        public BookModel RetriveBookById(long BookId)
+        public BookModel RetriveBookById(long bookId)
         {
             using (con)
             {
@@ -67,7 +67,7 @@ namespace RepositoryLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SPRetriveBookById", con);
                     cmd.CommandType= CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
                     con.Open();
                     SqlDataReader dataReader= cmd.ExecuteReader();
                     if (dataReader.HasRows)
@@ -143,7 +143,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public BookModel UpdateBookDetails(long BookId, BookModel bookModel)
+        public BookModel UpdateBookDetails(long bookId, BookModel bookModel)
         {
             using (con)
             {
@@ -151,7 +151,7 @@ namespace RepositoryLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SPBookUpdate", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
                     cmd.Parameters.AddWithValue("@BookTitle", bookModel.BookTitle);
                     cmd.Parameters.AddWithValue("@Author", bookModel.Author);
                     cmd.Parameters.AddWithValue("@Rating", bookModel.Rating);
@@ -182,7 +182,7 @@ namespace RepositoryLayer.Service
             }
 
         }
-        public bool DeleteBook(long BookId)
+        public bool DeleteBook(long bookId)
         {
             using (con)
             {
@@ -190,7 +190,7 @@ namespace RepositoryLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SPBookDelete", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
                     con.Open();
                     var result = cmd.ExecuteNonQuery();
                     if(result != 0)

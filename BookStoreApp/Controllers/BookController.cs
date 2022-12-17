@@ -42,11 +42,11 @@ namespace BookStoreApp.Controllers
 
         [HttpGet]
         [Route("RetriveById")]
-        public IActionResult RetriveBookById(long BookId)
+        public IActionResult RetriveBookById(long bookId)
         {
             try
             {
-                var result = ibookBL.RetriveBookById(BookId);
+                var result = ibookBL.RetriveBookById(bookId);
                 if (result != null)
 
                 {
@@ -88,11 +88,11 @@ namespace BookStoreApp.Controllers
 
         [HttpPut]
         [Route("UpdateBook")]
-        public IActionResult UpdateBookDetails(long BookId, BookModel bookModel)
+        public IActionResult UpdateBookDetails(long bookId, BookModel bookModel)
         {
             try
             {
-                var result = ibookBL.UpdateBookDetails(BookId, bookModel);
+                var result = ibookBL.UpdateBookDetails(bookId, bookModel);
                 if (result != null)
 
                 {
@@ -111,11 +111,11 @@ namespace BookStoreApp.Controllers
 
         [HttpDelete]
         [Route("DeleteBook")]
-        public IActionResult DeleteBook(long BookId)
+        public IActionResult DeleteBook(long bookId)
         {
             try
             {
-                var result = ibookBL.DeleteBook(BookId);
+                var result = ibookBL.DeleteBook(bookId);
                 if (result != null)
 
                 {

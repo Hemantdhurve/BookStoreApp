@@ -8,9 +8,9 @@ namespace RepositoryLayer.Interface
     public interface IBookRL
     {
         public BookModel AddBook(BookModel bookModel);
-        public BookModel RetriveBookById(long BookId);
+        public BookModel RetriveBookById(long bookId);
         public List<BookModel> RetriveAllBooks();
-        public BookModel UpdateBookDetails(long BookId, BookModel bookModel);
+        public BookModel UpdateBookDetails(long bookId, BookModel bookModel);
         public bool DeleteBook(long BookId);
     }
 }

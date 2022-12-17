@@ -26,11 +26,11 @@ namespace BusinessLayer.Service
 				throw e;
 			}
         }
-        public BookModel RetriveBookById(long BookId)
+        public BookModel RetriveBookById(long bookId)
         {
 			try
 			{
-				return ibookRL.RetriveBookById(BookId);
+				return ibookRL.RetriveBookById(bookId);
 			}
 			catch (Exception e)
 			{
@@ -51,11 +51,11 @@ namespace BusinessLayer.Service
 				throw;
 			}
 		}
-        public BookModel UpdateBookDetails(long BookId, BookModel bookModel)
+        public BookModel UpdateBookDetails(long bookId, BookModel bookModel)
         {
 			try
 			{
-                return ibookRL.UpdateBookDetails(BookId, bookModel);
+                return ibookRL.UpdateBookDetails(bookId, bookModel);
             }
 			catch (Exception)
 			{
@@ -63,11 +63,11 @@ namespace BusinessLayer.Service
 				throw;
 			}
 		}
-        public bool DeleteBook(long BookId)
+        public bool DeleteBook(long bookId)
 		{
 			try
 			{
-				return ibookRL.DeleteBook(BookId);
+				return ibookRL.DeleteBook(bookId);
 			}
 			catch (Exception)
 			{

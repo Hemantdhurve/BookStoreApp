@@ -16,6 +16,7 @@ create table BookTable
 select * from BookTable;
 
 
+
 -- Create store procedure for the addition of book
  
  create or alter procedure SPBookAddition

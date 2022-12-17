@@ -75,7 +75,10 @@ namespace RepositoryLayer.Service
                    
                     if (result != 0)
                     {
-                        var token = GenerateSecurityToken(userLoginModel.EmailId);
+                        string query = "select UserId from UserTable where EmailId = '" + userLoginModel.EmailId + "'";
+                        SqlCommand cmd1 = new SqlCommand(query, con);
+                        var Id = cmd1.ExecuteScalar();
+                        var token = GenerateSecurityToken(userLoginModel.EmailId,Id.ToString());
                         return token;
                     }
                     else
@@ -92,7 +95,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public string GenerateSecurityToken(string emailId)
+        public string GenerateSecurityToken(string emailId,string userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(iconfiguration["JWT:Key"]);
@@ -102,7 +105,8 @@ namespace RepositoryLayer.Service
                 { 
                     //Added Role claim for the user
                     new Claim(ClaimTypes.Role,"User"),
-                    new Claim("EmailId", emailId)
+                    new Claim(ClaimTypes.Email, emailId),
+                    new Claim("UserId", userId.ToString())
 
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
@@ -172,22 +176,14 @@ namespace RepositoryLayer.Service
                     {
                         while (dataReader.Read())
                         {
-                            //emailId = Convert.ToString(dataReader["EmailId"] == DBNull.Value ? default : dataReader["EmailId"]);
-                            if(dataReader["EmailId"] == DBNull.Value)
-                            {
-                                return default;
-                            }
-                            else
-                            {
-                                emailId = Convert.ToString(dataReader["EmailId"]);
-                                return emailId;
-                            }
+                            var userId = Convert.ToInt64(dataReader["UserId"] == DBNull.Value ? default : dataReader["UserId"]);
+                         
+                            var token = this.GenerateSecurityToken(emailId, userId.ToString());
+                            MSMQ msmq = new MSMQ();
+                            msmq.sendData2Queue(token);
+                            return token;
                         }
-                        var token = this.GenerateSecurityToken(emailId);
-                        MSMQ msmq = new MSMQ();
-                        msmq.sendData2Queue(token);
-
-                        return token;
+                        return "Forget successful";
                     }
                     else
                     {

@@ -10,5 +10,6 @@ namespace RepositoryLayer.Interface
         public BookModel AddBook(BookModel bookModel);
         public BookModel RetriveBookById(long BookId);
         public List<BookModel> RetriveAllBooks();
+        public BookModel UpdateBookDetails(long BookId, BookModel bookModel);
     }
 }

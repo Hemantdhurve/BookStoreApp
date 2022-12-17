@@ -51,5 +51,17 @@ namespace BusinessLayer.Service
 				throw;
 			}
 		}
+        public BookModel UpdateBookDetails(long BookId, BookModel bookModel)
+        {
+			try
+			{
+                return ibookRL.UpdateBookDetails(BookId, bookModel);
+            }
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
     }
 }

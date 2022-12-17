@@ -9,7 +9,7 @@ create table BookTable
 	DiscountedPrice int not null,
 	ActualPrice int not null,
 	Description varchar(max) not null,
-	BooksQuantity int not null,
+	BookQuantity int not null,
 	Image varchar(max) not null
 );
 
@@ -60,4 +60,33 @@ create procedure SPRetriveAllBooks
 as
 	begin
 		select * from BookTable;
+	end
+
+--Create store Procedure for the Update Book
+
+create or alter procedure SPBookUpdate
+(	@BookId int,
+	@BookTitle varchar(100),
+	@Author varchar(100),
+	@Rating float,
+	@RatedCount int,
+	@DiscountedPrice int,
+	@ActualPrice int,
+	@Description varchar(max),
+	@BookQuantity int,
+	@Image varchar(max)
+)
+as
+	begin
+		update BookTable set
+			BookTitle=@BookTitle,
+			Author=@Author,
+			Rating=@Rating,
+			RatedCount=@RatedCount,
+			DiscountedPrice=@DiscountedPrice,
+			ActualPrice=@ActualPrice,
+			Description=@Description,
+			BookQuantity=@BookQuantity,
+			Image=@Image
+		where BookId=@BookId
 	end

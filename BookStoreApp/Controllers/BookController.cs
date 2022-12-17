@@ -85,5 +85,28 @@ namespace BookStoreApp.Controllers
                 throw;
             }
         }
+
+        [HttpPut]
+        [Route("UpdateBook")]
+        public IActionResult UpdateBookDetails(long BookId, BookModel bookModel)
+        {
+            try
+            {
+                var result = ibookBL.UpdateBookDetails(BookId, bookModel);
+                if (result != null)
+
+                {
+                    return this.Ok(new { Success = true, message = "Books Details Update Successfully", Response = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Books Updation UnSuccessful" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

@@ -143,5 +143,44 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public BookModel UpdateBookDetails(long BookId, BookModel bookModel)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPBookUpdate", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@BookId", BookId);
+                    cmd.Parameters.AddWithValue("@BookTitle", bookModel.BookTitle);
+                    cmd.Parameters.AddWithValue("@Author", bookModel.Author);
+                    cmd.Parameters.AddWithValue("@Rating", bookModel.Rating);
+                    cmd.Parameters.AddWithValue("@RatedCount", bookModel.RatedCount);
+                    cmd.Parameters.AddWithValue("@DiscountedPrice", bookModel.DiscountedPrice);
+                    cmd.Parameters.AddWithValue("@ActualPrice", bookModel.ActualPrice);
+                    cmd.Parameters.AddWithValue("@Description", bookModel.Description);
+                    cmd.Parameters.AddWithValue("@BookQuantity", bookModel.BookQuantity);
+                    cmd.Parameters.AddWithValue("@Image", bookModel.Image);
+                    con.Open();
+
+                    var result = cmd.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        return bookModel;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                }
+                catch (Exception e)
+                {
+
+                    throw e;
+                }
+            }
+
+        }
     }
 }

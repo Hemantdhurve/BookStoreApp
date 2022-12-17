@@ -98,12 +98,12 @@ namespace RepositoryLayer.Service
             var key = Encoding.ASCII.GetBytes(iconfiguration["JWT:Key"]);
             var tokenDescriptor = new SecurityTokenDescriptor
             {
-                Subject = new ClaimsIdentity(new[] 
+                Subject = new ClaimsIdentity(new[]
                 { 
                     //Added Role claim for the user
                     new Claim(ClaimTypes.Role,"User"),
                     new Claim("EmailId", emailId)
-                    
+
                 }),
                 Expires = DateTime.UtcNow.AddHours(1),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)

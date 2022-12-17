@@ -34,3 +34,11 @@ as
 		select * from CartTable where UserId=@UserId
 	end
 go
+
+--Create store procedure for the Update Quantity of cart
+
+create procedure SPUpdateQTY ( @CartId int,@BookQuantity int )
+as 
+	begin 
+		update CartTable set BookQuantity=@BookQuantity where CartId=@CartId
+	end

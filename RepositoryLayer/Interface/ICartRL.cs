@@ -7,7 +7,8 @@ namespace RepositoryLayer.Interface
 {
     public interface ICartRL
     {
-        public CartModel AddCart(CartModel cartModel, long UserId);
-        public IEnumerable<CartModel> RetriveCart(long UserId);
+        public CartModel AddCart(CartModel cartModel, long userId);
+        public IEnumerable<CartModel> RetriveCart(long userId);
+        public string UpdateCartQty(long cartId, long bookQuantity);
     }
 }

@@ -19,6 +19,7 @@ namespace RepositoryLayer.Service
         }
         public SqlConnection con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreApp;Integrated Security=True;");
 
+        public CartModel cartModel=new CartModel();
         public CartModel AddCart(CartModel cartModel, long userId)
         {
             using (con)
@@ -49,7 +50,7 @@ namespace RepositoryLayer.Service
             }
 
         }
-        public IEnumerable<CartModel> RetriveCart(long UserId)
+        public IEnumerable<CartModel> RetriveCart(long userId)
         {
             List<CartModel> cartList = new List<CartModel>();
             try
@@ -59,7 +60,7 @@ namespace RepositoryLayer.Service
 
                     SqlCommand cmd = new SqlCommand("SPRetriveAllCart", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@UserId", UserId);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
                     con.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
                     if (dataReader.HasRows)
@@ -86,6 +87,36 @@ namespace RepositoryLayer.Service
             catch (Exception)
             {
                 throw;
+            }
+        }
+
+        public string UpdateCartQty(long cartId,long bookQuantity)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPUpdateQTY", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@CartId", cartId);
+                    cmd.Parameters.AddWithValue("@BookQuantity", bookQuantity);
+                    con.Open();
+                    var result = cmd.ExecuteNonQuery();
+                    if(result != 0)
+                    {
+                        return "Updated quantity of book: " + bookQuantity.ToString();
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
             }
         }
     }

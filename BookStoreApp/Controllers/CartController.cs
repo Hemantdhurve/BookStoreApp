@@ -66,5 +66,29 @@ namespace BookStoreApp.Controllers
                 throw e;
             }
         }
+
+        [HttpPut]
+        [Route("UpdateQTY")]
+        public IActionResult UpdateCartQty(long cartId,long bookQuantity)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                var result = icartBL.UpdateCartQty(cartId, bookQuantity);
+                if (result != null)
+                {
+                    return this.Ok(new { success = true, message = "Quantity Updated Successful", data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Quantity Updation Unsuccessful" });
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
     }
 }

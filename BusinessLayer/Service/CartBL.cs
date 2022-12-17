@@ -28,11 +28,24 @@ namespace BusinessLayer.Service
 				throw;
 			}
         }
-        public IEnumerable<CartModel> RetriveCart(long UserId)
+        public IEnumerable<CartModel> RetriveCart(long userId)
 		{
 			try
 			{
-                return icartRL.RetriveCart(UserId);
+                return icartRL.RetriveCart(userId);
+            }
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
+
+        public string UpdateCartQty(long cartId, long bookQuantity)
+		{
+			try
+			{
+                return icartRL.UpdateCartQty(cartId, bookQuantity);
             }
 			catch (Exception)
 			{

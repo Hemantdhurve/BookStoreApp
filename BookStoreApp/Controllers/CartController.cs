@@ -90,5 +90,29 @@ namespace BookStoreApp.Controllers
                 throw e;
             }
         }
+
+        [HttpDelete]
+        [Route("DeleteCart")]
+        public IActionResult DeleteCart(long cartId)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
+                var result = icartBL.DeleteCart(cartId);
+                if (result != null)
+
+                {
+                    return this.Ok(new { Success = true, message = "Books Deleted Successfully" });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Books Deletion UnSuccessful" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

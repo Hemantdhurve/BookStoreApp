@@ -42,3 +42,12 @@ as
 	begin 
 		update CartTable set BookQuantity=@BookQuantity where CartId=@CartId
 	end
+
+
+-- Create stored procedure for the delete Cart
+
+create procedure SPDeleteCart ( @CartId int )
+as 
+	begin
+		delete from CartTable where CartId=@CartId
+	end

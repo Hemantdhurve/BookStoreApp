@@ -53,5 +53,18 @@ namespace BusinessLayer.Service
 				throw;
 			}
 		}
+
+        public bool DeleteCart(long cartId)
+		{
+			try
+			{
+                return icartRL.DeleteCart(cartId);
+            }
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
     }
 }

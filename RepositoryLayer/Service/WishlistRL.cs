@@ -48,7 +48,35 @@ namespace RepositoryLayer.Service
                     throw;
                 }
             }
+        }
 
+        public bool DeleteWishlist(long wishlistId)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPDeleteWishlist", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@WishlistId", wishlistId);
+                    con.Open();
+                    var result = cmd.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
         }
 
     }

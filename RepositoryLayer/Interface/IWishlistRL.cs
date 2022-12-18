@@ -7,5 +7,6 @@ namespace RepositoryLayer.Interface
     public interface IWishlistRL
     {
         public string AddWishlist(long userId, long bookId);
+        public bool DeleteWishlist(long wishlistId);
     }
 }

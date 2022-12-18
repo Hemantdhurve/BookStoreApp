@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using RepositoryLayer.Interface;
+using RepositoryLayer.Service;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -19,6 +20,19 @@ namespace BusinessLayer.Service
             try
             {
                 return iwishlistRL.AddWishlist(userId, bookId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public bool DeleteWishlist(long wishlistId)
+        {
+            try
+            {
+                return iwishlistRL.DeleteWishlist(wishlistId);
             }
             catch (Exception)
             {

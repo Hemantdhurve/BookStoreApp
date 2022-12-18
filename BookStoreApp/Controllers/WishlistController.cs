@@ -20,7 +20,7 @@ namespace BookStoreApp.Controllers
         }
         [Authorize]
         [HttpPost]
-        [Route("AddWishlist")]
+        [Route("Add")]
         public IActionResult AddWishlist(long bookId)
         {
             try
@@ -34,6 +34,30 @@ namespace BookStoreApp.Controllers
                 else
                 {
                     return this.BadRequest(new { Status = false, Message = "Book Not Added to Wishlist" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("Delete")]
+        public IActionResult DeleteWishlist(long wishlistId)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
+                var result = iwishlistBL.DeleteWishlist(wishlistId);
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Wishlist Deleted Successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Wishlist deletion UnSuccessful" });
                 }
             }
             catch (Exception ex)

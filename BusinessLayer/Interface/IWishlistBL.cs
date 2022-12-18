@@ -7,5 +7,6 @@ namespace BusinessLayer.Interface
     public interface IWishlistBL
     {
         public string AddWishlist(long userId, long bookId);
+        public bool DeleteWishlist(long wishlistId);
     }
 }

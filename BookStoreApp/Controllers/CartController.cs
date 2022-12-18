@@ -18,7 +18,7 @@ namespace BookStoreApp.Controllers
             this.icartBL = icartBL;
         }
 
-        //[Authorize]
+        [Authorize]
         [HttpPost]
         [Route("AddCart")]
         public IActionResult AddCart(CartModel cartModel)
@@ -43,6 +43,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("RetriveCart")]
         public IActionResult RetriveCart()
@@ -67,9 +68,10 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("UpdateQTY")]
-        public IActionResult UpdateCartQty(long cartId,long bookQuantity)
+        public IActionResult UpdateCartQty(long cartId, long bookQuantity)
         {
             try
             {
@@ -91,6 +93,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("DeleteCart")]
         public IActionResult DeleteCart(long cartId)

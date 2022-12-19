@@ -1,4 +1,5 @@
 ﻿using BusinessLayer.Interface;
+using CommonLayer.Model;
 using RepositoryLayer.Interface;
 using RepositoryLayer.Service;
 using System;
@@ -33,6 +34,19 @@ namespace BusinessLayer.Service
             try
             {
                 return iwishlistRL.DeleteWishlist(wishlistId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
+
+        public WishlistModel RetriveWishlist(long userId)
+        {
+            try
+            {
+                return iwishlistRL.RetriveWishlist(userId);
             }
             catch (Exception)
             {

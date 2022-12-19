@@ -28,3 +28,17 @@ as
 	begin 
 		delete from WishTable where WishlistId=@WishlistId
 	end
+
+--Create stored procedure for Retrive All Wishlist
+--performing join on bookTable and WishTable
+
+create or alter procedure SPRetriveAllWishlist (@UserId int)
+as
+	begin 
+		select w.WishlistId,w.BookId,w.UserId,b.BookTitle,b.Author,b.DiscountedPrice,b.ActualPrice,b.Image 
+		from WishTable w full join BookTable b on w.BookId=b.BookId
+		where w.UserId=@UserId
+	end
+
+	--Executing Procedure for a particular UserId
+exec SPRetriveAllWishlist @UserId=3;

@@ -26,7 +26,7 @@ namespace BookStoreApp.Controllers
             try
             {
                 var userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
-                var result = iwishlistBL.AddWishlist(userId,bookId);
+                var result = iwishlistBL.AddWishlist(userId, bookId);
                 if (result != null)
                 {
                     return this.Ok(new { Status = true, Message = "Book added to Wishlist", Data = result });
@@ -58,6 +58,30 @@ namespace BookStoreApp.Controllers
                 else
                 {
                     return this.BadRequest(new { Status = false, Message = "Wishlist deletion UnSuccessful" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("RetriveAll")]
+        public IActionResult RetriveWishlist()
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(x => x.Type == "UserId").Value);
+                var result = iwishlistBL.RetriveWishlist(userId);
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Wishlist Retrived Successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Wishlist Retrival UnSuccessful" });
                 }
             }
             catch (Exception ex)

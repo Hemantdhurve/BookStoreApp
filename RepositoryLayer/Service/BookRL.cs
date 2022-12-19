@@ -82,6 +82,7 @@ namespace RepositoryLayer.Service
                             bookModel.DiscountedPrice = Convert.ToInt64(dataReader["DiscountedPrice"]);
                             bookModel.ActualPrice = Convert.ToInt64(dataReader["ActualPrice"]);
                             bookModel.Description = dataReader["Description"].ToString();
+                            bookModel.BookQuantity = Convert.ToInt64(dataReader["BookQuantity"]);
                             bookModel.Image = dataReader["Image"].ToString();
                         }
                         return bookModel;
@@ -124,6 +125,7 @@ namespace RepositoryLayer.Service
                                 DiscountedPrice = Convert.ToInt64(dataReader["DiscountedPrice"]),
                                 ActualPrice = Convert.ToInt64(dataReader["ActualPrice"]),
                                 Description = dataReader["Description"].ToString(),
+                                BookQuantity = Convert.ToInt64(dataReader["BookQuantity"]),
                                 Image = dataReader["Image"].ToString(),
                             });
                         }

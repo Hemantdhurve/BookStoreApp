@@ -89,5 +89,31 @@ namespace BookStoreApp.Controllers
                 throw e;
             }
         }
+
+        [Authorize]
+        [HttpPut]
+        [Route("Update")]
+        public IActionResult UpdateAddress(long addressId,Addressmodel addressmodel)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                var result = iaddressBL.UpdateAddress(userId,addressId, addressmodel);
+                if (result != null)
+                {
+                    return this.Ok(new { success = true, message = "Address Updated Successful", data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Address Updation Unsuccessful" });
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
+
     }
 }

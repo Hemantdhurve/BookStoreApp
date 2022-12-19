@@ -10,7 +10,7 @@ namespace BusinessLayer.Interface
     {
         public Addressmodel AddAddress(long userId, Addressmodel addressmodel);
         public bool DeleteAddress(long addressId);
-
         public Addressmodel RetriveAddress(long userId);
+        public Addressmodel UpdateAddress(long userId, long addressId, Addressmodel addressmodel);
     }
 }

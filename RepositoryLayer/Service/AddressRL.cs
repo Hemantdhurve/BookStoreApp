@@ -18,6 +18,7 @@ namespace RepositoryLayer.Service
         }
         public SqlConnection con = new SqlConnection("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=BookStoreApp;Integrated Security=True;");
 
+        public Addressmodel addressmodel = new Addressmodel();
         public Addressmodel AddAddress(long userId,Addressmodel addressmodel)
         {
             using (con)
@@ -116,5 +117,36 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public Addressmodel UpdateAddress(long userId,long addressId,Addressmodel addressmodel) 
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPUpdateAddress", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@AddressId", addressId);
+                    cmd.Parameters.AddWithValue("@TypeId", addressmodel.TypeId);
+                    cmd.Parameters.AddWithValue("@Address", addressmodel.Address);
+                    cmd.Parameters.AddWithValue("@City", addressmodel.City);
+                    cmd.Parameters.AddWithValue("@State", addressmodel.State);
+                    con.Open();
+                    var result = cmd.ExecuteNonQuery();
+                    if (result != 0)
+                    {
+                        return addressmodel;
+                    }
+                    else
+                    {
+                        return addressmodel;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            } 
+        }
     }
 }

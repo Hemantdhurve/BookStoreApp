@@ -64,5 +64,30 @@ namespace BookStoreApp.Controllers
                 throw ex;
             }
         }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Retrive")]
+        public IActionResult RetriveAddress()
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                var result = iaddressBL.RetriveAddress(userId);
+                if (result != null)
+                {
+                    return this.Ok(new { success = true, message = "Address Retrive Successful", data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Address Retrival Unsuccessful" });
+                }
+            }
+            catch (Exception e)
+            {
+
+                throw e;
+            }
+        }
     }
 }

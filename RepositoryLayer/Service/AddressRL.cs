@@ -78,5 +78,43 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public Addressmodel RetriveAddress(long userId)
+        {
+            using (con)
+            {
+                try
+                {
+                    Addressmodel addressmodel = new Addressmodel();
+                    SqlCommand cmd = new SqlCommand("SPRetriveAddress", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    con.Open();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    if (dataReader.HasRows)
+                    {
+                        while (dataReader.Read())
+                        {
+                            addressmodel.AddressId = Convert.ToInt64(dataReader["AddressId"]);
+                            addressmodel.UserId = Convert.ToInt64(dataReader["UserId"]);
+                            addressmodel.TypeId = Convert.ToInt64(dataReader["TypeId"]);
+                            addressmodel.Address = dataReader["Address"].ToString();
+                            addressmodel.City = dataReader["City"].ToString();
+                            addressmodel.State = dataReader["State"].ToString();
+                        }
+                        return addressmodel;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+
+                }
+                catch (Exception)
+                {
+                    throw;
+                }
+            }
+        }
+
     }
 }

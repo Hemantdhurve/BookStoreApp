@@ -39,5 +39,19 @@ namespace BusinessLayer.Service
 				throw;
 			}
 		}
+
+
+        public Addressmodel RetriveAddress(long userId)
+		{
+			try
+			{
+				return iaddressRL.RetriveAddress(userId);
+			}
+			catch (Exception)
+			{
+
+				throw;
+			}
+		}
     }
 }

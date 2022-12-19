@@ -50,5 +50,33 @@ namespace RepositoryLayer.Service
             }
         }
 
+        public bool DeleteAddress(long addressId)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPDeleteAddress", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@AddressId", addressId);
+                    con.Open();
+                    var result= cmd.ExecuteNonQuery();
+                    if(result != 0)
+                    {
+                        return true;
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
+
     }
 }

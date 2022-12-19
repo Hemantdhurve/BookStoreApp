@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -17,6 +18,7 @@ namespace BookStoreApp.Controllers
             this.iaddressBL= iaddressBL;
         }
 
+        [Authorize]
         [HttpPost]
         [Route("Add")]
         public IActionResult AddAddress(Addressmodel addressmodel)
@@ -32,6 +34,29 @@ namespace BookStoreApp.Controllers
                 else
                 {
                     return this.BadRequest(new { Status = false, Message = "Address addition Unsuccessful" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        [Authorize]
+        [HttpDelete]
+        [Route("Delete")]
+        public IActionResult DeleteAddress(long addressId)
+        {
+            try
+            {
+                var result = iaddressBL.DeleteAddress(addressId);
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Address Deleted Successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Address deletion UnSuccessful" });
                 }
             }
             catch (Exception ex)

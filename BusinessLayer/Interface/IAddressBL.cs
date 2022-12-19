@@ -9,5 +9,6 @@ namespace BusinessLayer.Interface
     public interface IAddressBL
     {
         public Addressmodel AddAddress(long userId, Addressmodel addressmodel);
+        public bool DeleteAddress(long addressId);
     }
 }

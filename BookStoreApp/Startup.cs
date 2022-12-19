@@ -54,6 +54,9 @@ namespace BookStoreApp
             services.AddTransient<IWishlistBL,WishlistBL>();
             services.AddTransient<IWishlistRL,WishlistRL>();
 
+            services.AddTransient<IAddressBL, AddressBL>();
+            services.AddTransient<IAddressRL, AddressRL>();
+
             //swagger implementation
             services.AddSwaggerGen();
             services.AddSwaggerGen(c =>

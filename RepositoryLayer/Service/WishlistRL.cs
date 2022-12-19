@@ -79,47 +79,6 @@ namespace RepositoryLayer.Service
             }
         }
 
-        //public IEnumerable<WishlistModel> RetriveWishlist(long userId)
-        //{
-        //    WishlistModel wishlistModel = new WishlistModel();
-        //    try
-        //    {
-        //        using (con)
-        //        {
-
-        //            SqlCommand cmd = new SqlCommand("SPRetriveAllWishlist", con);
-        //            cmd.CommandType = CommandType.StoredProcedure;
-        //            cmd.Parameters.AddWithValue("@UserId", userId);
-        //            con.Open();
-        //            SqlDataReader dataReader = cmd.ExecuteNonQuery();
-        //            if (dataReader.HasRows)
-        //            {
-        //                while (dataReader.Read())
-        //                {
-        //                    wishlistModel.WishlistId = Convert.ToInt64(dataReader["WishlistId"]);
-        //                    wishlistModel.BookId = Convert.ToInt64(dataReader["BookId"]);
-        //                    wishlistModel.UserId = Convert.ToInt64(dataReader["UserId"]);
-        //                    //BookTitle = dataReader["BookTitle"].ToString(),
-        //                    //Author = dataReader["Author"].ToString(),
-        //                    //DiscountedPrice = Convert.ToInt64(dataReader["DiscountedPrice"]),
-        //                    //ActualPrice = Convert.ToInt64(dataReader["ActualPrice"]),
-        //                    //Image = dataReader["Image"].ToString()
-
-        //                };
-        //                return (IEnumerable<WishlistModel>)wishlistModel;
-        //            }
-        //            else
-        //            {
-        //                return null;
-        //            }
-
-        //        }
-        //    }
-        //    catch (Exception)
-        //    {
-        //        throw;
-        //    }
-        //}
         public WishlistModel RetriveWishlist(long userId)
         {
             using (con)

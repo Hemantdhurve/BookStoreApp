@@ -66,3 +66,12 @@ select * from OrderTable;
 select * from CartTable
 select * from BookTable
 select * from AddressTable
+
+
+--Create stored procedure for Delete Order
+
+create procedure SPDeleteOrder (@OrderId int)
+as
+	begin
+		delete from OrderTable where OrderId=@OrderId
+	end

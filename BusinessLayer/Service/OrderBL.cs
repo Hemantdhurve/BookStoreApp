@@ -27,5 +27,18 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+
+        public bool DeleteOrder(long orderId)
+        {
+            try
+            {
+                return iorderRL.DeleteOrder(orderId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

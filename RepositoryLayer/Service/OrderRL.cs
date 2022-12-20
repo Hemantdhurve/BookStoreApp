@@ -50,5 +50,34 @@ namespace RepositoryLayer.Service
                 }
             }
         }
+
+        public bool DeleteOrder(long orderId)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPDeleteOrder", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@OrderId", orderId);
+                    con.Open();
+                    var result = cmd.ExecuteNonQuery();
+                    if(result != 0 )
+                    {
+                        return true;
+
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
     }
 }

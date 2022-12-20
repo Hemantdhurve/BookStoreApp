@@ -40,5 +40,28 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [HttpDelete]
+        [Route("Delete")]
+        public IActionResult DeleteOrder(long orderId)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                var result = iorderBL.DeleteOrder(orderId);
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Order Deleted Successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Order Deletion UnSuccessfully" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }

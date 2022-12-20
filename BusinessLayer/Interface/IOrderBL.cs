@@ -8,5 +8,6 @@ namespace BusinessLayer.Interface
     public interface IOrderBL
     {
         public OrderModel AddOrder(long userId, OrderModel orderModel);
+        public bool DeleteOrder(long orderId);
     }
 }

@@ -1,4 +1,4 @@
---Create Table for the Cart  
++--Create Table for the Cart  
 --Take Foreign key as BookId and UserId and Primary key as CartId
 
 create table CartTable

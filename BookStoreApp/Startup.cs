@@ -60,6 +60,9 @@ namespace BookStoreApp
             services.AddTransient<IFeedbackBL, FeedbackBL>();
             services.AddTransient<IFeedbackRL, FeedbackRL>();
 
+            services.AddTransient<IOrderBL, OrderBL>();
+            services.AddTransient<IOrderRL, OrderRL>();
+
             //swagger implementation
             services.AddSwaggerGen();
             services.AddSwaggerGen(c =>

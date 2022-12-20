@@ -1,0 +1,68 @@
+--create table for the Order
+
+create table OrderTable
+(	OrderId int identity (1,1) primary key,
+	UserId int foreign key (UserId) references UserTable(UserId),
+	BookId int foreign key (BookId) references BookTable(BookId),
+	CartId int foreign key (CartId) references CartTable(CartId),
+	AddressId int foreign key (AddressId) references AddressTable(AddressId),
+	OrderQuantity int,
+	TotalPrice int,
+	TotalDiscountedPrice int,
+	OrderPlacedDate date
+);
+
+select * from OrderTable;
+drop table OrderTable
+
+--Create stored procedure for Add Order
+
+create or alter procedure SPAddOrder 
+(	@UserId int,
+	@BookId int,
+	@cartId int,
+	@AddressId int
+)
+as
+	declare @OrderQuantity int;
+	declare @TotalPrice int;
+	declare @TotalDiscountedPrice int;	
+	declare @TotalAmount int;
+	declare @BookTotalQuantity int;
+	begin 
+		if (exists (select * from CartTable where CartId=@cartId))
+			begin
+				set @OrderQuantity=(select BookQuantity from CartTable where CartId=@cartId);
+				set @BookTotalQuantity=(select BookQuantity from BookTable b inner join CartTable c on b.BookId=c.BookId where c.cartId=@cartId);
+				set @TotalPrice=(select ActualPrice from BookTable where BookId=@BookId);
+				set @TotalDiscountedPrice=(select DiscountedPrice from BookTable where BookId=@BookId);				 
+				set @TotalAmount=@TotalDiscountedPrice*@OrderQuantity;	
+				
+					if(@OrderQuantity <= @BookTotalQuantity)
+						begin
+							insert into OrderTable values (@UserId,@BookId,@CartId,@AddressId,@OrderQuantity,@TotalAmount,@TotalDiscountedPrice,GETDATE())
+						
+							begin
+								update CartTable set BookQuantity=BookQuantity-@OrderQuantity where BookId=@BookId
+							end
+							begin
+								delete from CartTable where BookId=@BookId
+							end
+							print 'Executed stored procedure'
+						end						
+					else
+						begin
+							print 'Please Update Quantity of Book'
+						end
+			end
+end
+
+	
+exec SPAddOrder @UserId=3,@BookId=6,@CartId=5,@AddressId=4;
+select * from OrderTable;
+
+--insert into OrderTable values(3,6,1,4,5,10,50,GETDATE());
+
+select * from CartTable
+select * from BookTable
+select * from AddressTable

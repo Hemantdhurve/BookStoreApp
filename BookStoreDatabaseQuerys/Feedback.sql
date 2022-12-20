@@ -19,3 +19,14 @@ as
 		insert into FeedbackTable (UserId,BookId,Rating,Comment) 
 			   values(@UserId,@BookId,@Rating,@Comment)
 	end
+
+--Create stored procedure for the Retrive all Feedback
+
+create procedure SPRetriveFeedback (@BookId int)
+as
+	begin
+		select u.FullName,f.FeedbackId,f.UserId,f.BookId,f.Rating,f.Comment from FeedbackTable f
+		inner join UserTable u on f.UserId=u.UserId where BookId=@BookId
+	end
+
+	exec SPRetriveFeedback @BookId=3

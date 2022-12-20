@@ -27,6 +27,17 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+        public IEnumerable<FeedbackModel> RetriveFeedback(long bookId)
+        {
+            try
+            {
+                return ifeedbackRL.RetriveFeedback(bookId);
+            }
+            catch (Exception)
+            {
 
+                throw;
+            }
+        }
     }
 }

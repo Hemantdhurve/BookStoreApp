@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -28,16 +29,41 @@ namespace BookStoreApp.Controllers
                 var result = ifeedbackBL.AddFeedback(userId, feedbackModel);
                 if (result != null)
                 {
-                    return this.Ok(new { Status = true, Message = "Addition of Book is successfull", Data = result });
+                    return this.Ok(new { Status = true, Message = "Feedback Added Successfully", Data = result });
                 }
                 else
                 {
-                    return this.BadRequest(new { Status = false, Message = "Book addition Unsuccessful" });
+                    return this.BadRequest(new { Status = false, Message = "Feedback Addition UnSuccessfully" });
                 }
             }
             catch (Exception ex)
             {
                 throw ex;
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route("Retrive")]
+        public IActionResult RetriveFeedback(long bookId)
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                var result = ifeedbackBL.RetriveFeedback(bookId);
+
+                if (result != null)
+                {
+                    return Ok(new { Success = true, Message = "Feedback Retrive Successful", Data = result });
+                }
+                else
+                {
+                    return BadRequest(new { Success = false, Message = "Feedback Retrival Unsuccessful " });
+                }
+            }
+            catch (System.Exception)
+            {
+                throw;
             }
         }
     }

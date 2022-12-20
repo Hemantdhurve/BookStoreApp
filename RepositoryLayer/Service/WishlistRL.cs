@@ -79,7 +79,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public WishlistModel RetriveWishlist(long userId)
+        public WishlistModel RetriveWishlist(long bookId)
         {
             using (con)
             {
@@ -87,7 +87,7 @@ namespace RepositoryLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SPRetriveAllWishlist", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    cmd.Parameters.AddWithValue("@BookId", bookId);
                     con.Open();
                     WishlistModel wishListModel = new WishlistModel();
                     SqlDataReader rd = cmd.ExecuteReader();

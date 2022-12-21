@@ -63,5 +63,27 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("Retrive")]
+        public IActionResult RetriveOrder()
+        {
+            try
+            {
+                var userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                var result = iorderBL.RetriveOrder(userId);
+                if (result != null)
+                {
+                    return this.Ok(new { Status = true, Message = "Order Retrive Successfully", Data = result });
+                }
+                else
+                {
+                    return this.BadRequest(new { Status = false, Message = "Order Retrival UnSuccessfully" });
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
     }
 }

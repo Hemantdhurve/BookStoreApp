@@ -9,5 +9,6 @@ namespace BusinessLayer.Interface
     {
         public OrderModel AddOrder(long userId, OrderModel orderModel);
         public bool DeleteOrder(long orderId);
+        public IEnumerable<OrderModel> RetriveOrder(long userId);
     }
 }

@@ -55,7 +55,7 @@ as
 							print 'Please Update Quantity of Book'
 						end
 			end
-end
+	end
 
 	
 exec SPAddOrder @UserId=3,@BookId=6,@CartId=5,@AddressId=4;
@@ -75,3 +75,16 @@ as
 	begin
 		delete from OrderTable where OrderId=@OrderId
 	end
+
+select * from BookTable
+-- Create stored Procedure for the Retrive Order All
+
+create procedure SPRetriveOrder (@UserId int)
+as
+	begin
+		select b.BookTitle,b.Author,b.Image, o.OrderId,o.UserId,o.BookId,o.CartId,o.AddressId,o.OrderQuantity,o.TotalPrice,o.TotalDiscountedPrice
+		from OrderTable o inner join BookTable b on b.BookId=o.BookId
+		where o.UserId=@UserId
+	end
+
+exec SPRetriveOrder @UserId=3;

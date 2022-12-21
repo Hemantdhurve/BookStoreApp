@@ -40,5 +40,18 @@ namespace BusinessLayer.Service
                 throw;
             }
         }
+
+        public IEnumerable<OrderModel> RetriveOrder(long userId)
+        {
+            try
+            {
+                return iorderRL.RetriveOrder(userId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+        }
     }
 }

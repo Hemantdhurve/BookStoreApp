@@ -79,5 +79,42 @@ namespace RepositoryLayer.Service
                 }
             }
         }
+
+        public IEnumerable<OrderModel> RetriveOrder(long userId)
+        {
+            using (con)
+            {
+                try
+                {
+                    SqlCommand cmd = new SqlCommand("SPRetriveOrder", con);
+                    cmd.CommandType = CommandType.StoredProcedure;
+                    cmd.Parameters.AddWithValue("@UserId", userId);
+                    con.Open();
+                    List<OrderModel> orderList = new List<OrderModel>();
+                    SqlDataReader dataReader=cmd.ExecuteReader();
+                    while (dataReader.Read())
+                    {
+                        orderList.Add(new OrderModel()
+                        {
+                            OrderId = Convert.ToInt64(dataReader["OrderId"]),
+                            UserId = Convert.ToInt64(dataReader["UserId"]),
+                            BookId = Convert.ToInt64(dataReader["BookId"]),
+                            CartId = Convert.ToInt64(dataReader["CartId"]),
+                            AddressId = Convert.ToInt64(dataReader["AddressId"]),
+                            OrderQuantity = Convert.ToInt64(dataReader["OrderQuantity"]),
+                            TotalPrice = Convert.ToInt64(dataReader["TotalPrice"]),
+                            TotalDiscountedPrice = Convert.ToInt64(dataReader["TotalDiscountedPrice"]),
+                            OrderPlacedDate = Convert.ToDateTime(dataReader["OrderPlacedDate"]),
+                        }); 
+                    }
+                    return orderList;
+                }
+                catch (Exception)
+                {
+
+                    throw;
+                }
+            }
+        }
     }
 }

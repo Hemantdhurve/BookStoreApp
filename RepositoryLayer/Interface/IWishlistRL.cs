@@ -9,7 +9,6 @@ namespace RepositoryLayer.Interface
     {
         public string AddWishlist(long userId, long bookId);
         public bool DeleteWishlist(long wishlistId);
-        //public IEnumerable<WishlistModel> RetriveWishlist(long userId);
-        public WishlistModel RetriveWishlist(long userId);
+        public IEnumerable<WishlistModel> RetriveWishlist(long userId);
     }
 }

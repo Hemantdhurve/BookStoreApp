@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Interface;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
@@ -79,7 +80,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public WishlistModel RetriveWishlist(long bookId)
+        public IEnumerable<WishlistModel> RetriveWishlist(long userId)
         {
             using (con)
             {
@@ -87,24 +88,25 @@ namespace RepositoryLayer.Service
                 {
                     SqlCommand cmd = new SqlCommand("SPRetriveAllWishlist", con);
                     cmd.CommandType = CommandType.StoredProcedure;
-                    cmd.Parameters.AddWithValue("@BookId", bookId);
+                    cmd.Parameters.AddWithValue("@UserId", userId);
                     con.Open();
-                    WishlistModel wishListModel = new WishlistModel();
-                    SqlDataReader rd = cmd.ExecuteReader();
-                    if (rd.HasRows)
+                    List<WishlistModel> wishList = new List<WishlistModel>();
+                    SqlDataReader dataReader = cmd.ExecuteReader();
+                    while(dataReader.Read())
                     {
-                        while (rd.Read())
+                        wishList.Add(new WishlistModel()
                         {
-                            wishListModel.WishlistId = Convert.ToInt32(rd["WishlistId"]);
-                            wishListModel.BookId = Convert.ToInt32(rd["BookId"]);
-                            wishListModel.UserId = Convert.ToInt32(rd["UserId"]);
-                        }
-                        return wishListModel;
+                            WishlistId = Convert.ToInt64(dataReader["WishlistId"]),
+                            BookId = Convert.ToInt64(dataReader["BookId"]),
+                            UserId = Convert.ToInt64(dataReader["UserId"]),
+                            BookTitle = dataReader["BookTitle"].ToString(),
+                            Author = dataReader["Author"].ToString(),
+                            DiscountedPrice = Convert.ToInt64(dataReader["DiscountedPrice"]),
+                            ActualPrice = Convert.ToInt64(dataReader["ActualPrice"]),
+                            Image = dataReader["Image"].ToString(),
+                        });
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    return wishList;
                 }
                 catch (Exception)
                 {

@@ -42,7 +42,7 @@ namespace BusinessLayer.Service
             }
         }
 
-        public WishlistModel RetriveWishlist(long userId)
+        public IEnumerable<WishlistModel> RetriveWishlist(long userId)
         {
             try
             {

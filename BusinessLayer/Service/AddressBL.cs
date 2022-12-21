@@ -41,8 +41,8 @@ namespace BusinessLayer.Service
 		}
 
 
-        public Addressmodel RetriveAddress(long userId)
-		{
+        public IEnumerable<Addressmodel> RetriveAddress(long userId)
+        {
 			try
 			{
 				return iaddressRL.RetriveAddress(userId);

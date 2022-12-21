@@ -79,7 +79,7 @@ namespace RepositoryLayer.Service
             }
         }
 
-        public Addressmodel RetriveAddress(long userId)
+        public IEnumerable<Addressmodel> RetriveAddress(long userId)
         {
             using (con)
             {
@@ -90,24 +90,21 @@ namespace RepositoryLayer.Service
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", userId);
                     con.Open();
+                    List<Addressmodel> addressList = new List<Addressmodel>();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-                    if (dataReader.HasRows)
+                   while(dataReader.Read())
                     {
-                        while (dataReader.Read())
+                        addressList.Add(new Addressmodel()
                         {
-                            addressmodel.AddressId = Convert.ToInt64(dataReader["AddressId"]);
-                            addressmodel.UserId = Convert.ToInt64(dataReader["UserId"]);
-                            addressmodel.TypeId = Convert.ToInt64(dataReader["TypeId"]);
-                            addressmodel.Address = dataReader["Address"].ToString();
-                            addressmodel.City = dataReader["City"].ToString();
-                            addressmodel.State = dataReader["State"].ToString();
-                        }
-                        return addressmodel;
+                            AddressId = Convert.ToInt64(dataReader["AddressId"]),
+                            UserId = Convert.ToInt64(dataReader["UserId"]),
+                            TypeId = Convert.ToInt64(dataReader["TypeId"]),
+                            Address = dataReader["Address"].ToString(),
+                            City = dataReader["City"].ToString(),
+                            State = dataReader["State"].ToString()
+                        });
                     }
-                    else
-                    {
-                        return null;
-                    }
+                    return addressList;
 
                 }
                 catch (Exception)

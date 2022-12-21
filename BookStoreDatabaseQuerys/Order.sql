@@ -79,10 +79,10 @@ as
 select * from BookTable
 -- Create stored Procedure for the Retrive Order All
 
-create procedure SPRetriveOrder (@UserId int)
+create or alter procedure SPRetriveOrder (@UserId int)
 as
 	begin
-		select b.BookTitle,b.Author,b.Image, o.OrderId,o.UserId,o.BookId,o.CartId,o.AddressId,o.OrderQuantity,o.TotalPrice,o.TotalDiscountedPrice
+		select b.BookTitle,b.Author,b.Image, o.OrderId,o.UserId,o.BookId,o.CartId,o.AddressId,o.OrderQuantity,o.TotalPrice,o.TotalDiscountedPrice,o.OrderPlacedDate
 		from OrderTable o inner join BookTable b on b.BookId=o.BookId
 		where o.UserId=@UserId
 	end

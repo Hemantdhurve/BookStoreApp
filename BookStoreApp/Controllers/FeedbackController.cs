@@ -19,6 +19,7 @@ namespace BookStoreApp.Controllers
             this.ifeedbackBL = ifeedbackBL;
         }
 
+        [Authorize]
         [HttpPost]
         [Route("Add")]
         public IActionResult AddFeedback(FeedbackModel feedbackModel)

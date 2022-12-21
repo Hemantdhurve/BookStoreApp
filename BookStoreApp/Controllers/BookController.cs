@@ -42,6 +42,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("RetriveById")]
         public IActionResult RetriveBookById(long bookId)
@@ -65,6 +66,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("RetriveAll")]
         public IActionResult RetriveAllBooks()
@@ -88,6 +90,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpPut]
         [Route("UpdateBook")]
         public IActionResult UpdateBookDetails(long bookId, BookModel bookModel)
@@ -111,6 +114,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("DeleteBook")]
         public IActionResult DeleteBook(long bookId)

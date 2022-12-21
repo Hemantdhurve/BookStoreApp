@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System;
+using Microsoft.AspNetCore.Authorization;
 
 namespace BookStoreApp.Controllers
 {
@@ -17,6 +18,7 @@ namespace BookStoreApp.Controllers
             this.iorderBL = iorderBL;       
         }
 
+        [Authorize]
         [HttpPost]
         [Route("Add")]
         public IActionResult AddFeedback(OrderModel orderModel)
@@ -40,6 +42,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpDelete]
         [Route("Delete")]
         public IActionResult DeleteOrder(long orderId)
@@ -63,6 +66,7 @@ namespace BookStoreApp.Controllers
             }
         }
 
+        [Authorize]
         [HttpGet]
         [Route("Retrive")]
         public IActionResult RetriveOrder()

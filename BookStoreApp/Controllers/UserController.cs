@@ -77,7 +77,7 @@ namespace BookStoreApp.Controllers
 
                 if (resultLog != null)
                 {
-                    return Ok(new { success = true, message = "Reset Email Send" });
+                    return Ok(new { success = true, message = "Reset Email Send",data=resultLog });
                 }
                 else
                 {
@@ -99,12 +99,12 @@ namespace BookStoreApp.Controllers
         {
             try
             {
-                var emailId = User.FindFirst("EmailId").Value.ToString();
+                var emailId = User.FindFirst(ClaimTypes.Email).Value.ToString();
                 var resultLog = iuserBL.ResetPassword(emailId, newPassword, confirmPassword);
 
                 if (resultLog != null)
                 {
-                    return Ok(new { success = true, message = "Password Reset Successful" });
+                    return Ok(new { success = true, message = "Password Reset Successful",data=resultLog });
                 }
                 else
                 {

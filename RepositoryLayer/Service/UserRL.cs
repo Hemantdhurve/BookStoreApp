@@ -71,9 +71,9 @@ namespace RepositoryLayer.Service
                     cmd.Parameters.AddWithValue("@Password", ConvertToEncrypt(userLoginModel.Password));
                     //var decryptPass = ConvertToDecrypt(pass.Password);
                     con.Open();
-                    var result = cmd.ExecuteNonQuery();
-                   
-                    if (result != 0)
+                    var result = cmd.ExecuteScalar();
+                   // var decr = ConvertToDecrypt(userLoginModel.Password);
+                    if (result != null)
                     {
                         string query = "select UserId from UserTable where EmailId = '" + userLoginModel.EmailId + "'";
                         SqlCommand cmd1 = new SqlCommand(query, con);
@@ -212,7 +212,6 @@ namespace RepositoryLayer.Service
                         cmd.Parameters.AddWithValue("@EmailId", emailId);
                         cmd.Parameters.AddWithValue("@Password", ConvertToEncrypt(newPassword));
                         con.Open();
-
                         SqlDataReader dataReader=cmd.ExecuteReader();
 
                         if (dataReader.HasRows)
@@ -223,9 +222,9 @@ namespace RepositoryLayer.Service
                                 emailId = Convert.ToString(dataReader["EmailId"] == DBNull.Value ? default : dataReader["EmailId"]);
                                 newPassword = Convert.ToString(dataReader["Password"] == DBNull.Value ? default : dataReader["Password"]);
                             }
-                            return emailId;
+                            return newPassword;
                         }
-                        return emailId;
+                        return newPassword;
 
                     }
                     else
@@ -241,6 +240,5 @@ namespace RepositoryLayer.Service
                 }
             }
         }
-
     }
 }

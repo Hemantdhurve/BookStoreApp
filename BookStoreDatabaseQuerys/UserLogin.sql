@@ -5,5 +5,6 @@ CREATE or ALTER procedure SPLogin
 	@Password varchar(100)
 AS
 BEGIN
-	select * from UserTable where EmailId=@EmailId and Password=@Password
+	select EmailId, Password from UserTable where EmailId=@EmailId and Password=@Password
 END
+

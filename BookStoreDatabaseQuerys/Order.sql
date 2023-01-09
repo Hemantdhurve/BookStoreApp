@@ -4,7 +4,7 @@ create table OrderTable
 (	OrderId int identity (1,1) primary key,
 	UserId int foreign key (UserId) references UserTable(UserId),
 	BookId int foreign key (BookId) references BookTable(BookId),
-	CartId int foreign key (CartId) references CartTable(CartId),
+	CartId int foreign key references CartTable(CartId),
 	AddressId int foreign key (AddressId) references AddressTable(AddressId),
 	OrderQuantity int,
 	TotalPrice int,
@@ -30,8 +30,8 @@ as
 	declare @TotalAmount int;
 	declare @BookTotalQuantity int;
 	begin 
-		if (exists (select * from CartTable where CartId=@cartId))
-			begin
+		--if (exists (select * from CartTable where CartId=@cartId))
+		--	begin
 				set @OrderQuantity=(select BookQuantity from CartTable where CartId=@cartId);
 				set @BookTotalQuantity=(select BookQuantity from BookTable b inner join CartTable c on b.BookId=c.BookId where c.cartId=@cartId);
 				set @TotalPrice=(select ActualPrice from BookTable where BookId=@BookId);
@@ -54,11 +54,11 @@ as
 						begin
 							print 'Please Update Quantity of Book'
 						end
-			end
+			
 	end
 
 	
-exec SPAddOrder @UserId=3,@BookId=6,@CartId=5,@AddressId=4;
+exec SPAddOrder @UserId=3,@BookId=7,@CartId=6,@AddressId=4;
 select * from OrderTable;
 
 --insert into OrderTable values(3,6,1,4,5,10,50,GETDATE());

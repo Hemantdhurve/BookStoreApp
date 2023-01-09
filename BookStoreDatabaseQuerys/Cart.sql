@@ -28,13 +28,16 @@ as
 
 --Create stored procedure for the Retrive All
 
-create procedure SPRetriveAllCart( @UserId int)
+create or alter procedure SPRetriveAllCart( @UserId int)
 as
 	begin
-		select * from CartTable where UserId=@UserId
+		--select * from CartTable where UserId=@UserId
+		select c.CartId,c.BookId,c.UserId,c.BookQuantity,b.BookTitle,b.Author,b.DiscountedPrice,b.ActualPrice,b.Image 
+		from CartTable c full join BookTable b on b.BookId=c.BookId where c.UserId=@UserId
 	end
 go
 
+exec SPretriveAllCart @UserId=3
 --Create store procedure for the Update Quantity of cart
 
 create procedure SPUpdateQTY ( @CartId int,@BookQuantity int )

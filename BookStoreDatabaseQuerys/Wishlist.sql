@@ -7,7 +7,6 @@ create table WishTable
 )
 
 select * from WishTable;
-
 -- Create stored procedure for the Add to Wishlist
 
 create or alter procedure SPAddWishlist

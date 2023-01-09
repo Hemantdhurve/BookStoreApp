@@ -63,25 +63,22 @@ namespace RepositoryLayer.Service
                     cmd.Parameters.AddWithValue("@UserId", userId);
                     con.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-                    if (dataReader.HasRows)
+                    while (dataReader.Read())
                     {
-                        while (dataReader.Read())
+                        cartList.Add(new CartModel()
                         {
-                            cartList.Add(new CartModel()
-                            {
-                                CartId = Convert.ToInt64(dataReader["CartId"]),
-                                BookId = Convert.ToInt64(dataReader["BookId"]),
-                                UserId = Convert.ToInt64(dataReader["UserId"]),
-                                BookQuantity = Convert.ToInt64(dataReader["BookQuantity"])
-                            });
-                        }
-                        return cartList;
+                            CartId = Convert.ToInt64(dataReader["CartId"]),
+                            BookId = Convert.ToInt64(dataReader["BookId"]),
+                            UserId = Convert.ToInt64(dataReader["UserId"]),
+                            BookTitle = dataReader["BookTitle"].ToString(),
+                            Author = dataReader["Author"].ToString(),
+                            DiscountedPrice = Convert.ToInt64(dataReader["DiscountedPrice"]),
+                            ActualPrice = Convert.ToInt64(dataReader["ActualPrice"]),
+                            BookQuantity = Convert.ToInt64(dataReader["BookQuantity"]),
+                            Image = dataReader["Image"].ToString(),
+                        });
                     }
-                    else
-                    {
-                        return null;
-                    }
-                    
+                    return cartList;                    
                 }
             }
             catch (Exception)

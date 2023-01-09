@@ -21,7 +21,7 @@ namespace BookStoreApp.Controllers
         [Authorize]
         [HttpPost]
         [Route("Add")]
-        public IActionResult AddFeedback(OrderModel orderModel)
+        public IActionResult AddOrder(OrderModel orderModel)
         {
             try
             {

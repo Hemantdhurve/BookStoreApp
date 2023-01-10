@@ -53,6 +53,8 @@ namespace RepositoryLayer.Service
 
         public IEnumerable<FeedbackModel> RetriveFeedback(long bookId)
         {
+            List<FeedbackModel> feedbackList = new List<FeedbackModel>();
+
             using (con)
             {
                 try
@@ -62,9 +64,8 @@ namespace RepositoryLayer.Service
                     cmd.Parameters.AddWithValue("@BookId", bookId);
                     con.Open();
                     SqlDataReader dataReader = cmd.ExecuteReader();
-                    List<FeedbackModel> feedbackList = new List<FeedbackModel>();
                    
-                    if (dataReader.Read())
+                    while (dataReader.Read())
                     {
                         feedbackList.Add(new FeedbackModel()
                         {

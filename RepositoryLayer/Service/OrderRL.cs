@@ -25,11 +25,10 @@ namespace RepositoryLayer.Service
             {
                 try
                 {
-                    SqlCommand cmd = new SqlCommand("SPAddOrder", con);
+                    SqlCommand cmd = new SqlCommand("spAddOrder1", con);
                     cmd.CommandType = CommandType.StoredProcedure;
                     cmd.Parameters.AddWithValue("@UserId", userId);
                     cmd.Parameters.AddWithValue("@BookId", orderModel.BookId);
-                    cmd.Parameters.AddWithValue("@CartId", orderModel.CartId);
                     cmd.Parameters.AddWithValue("@AddressId", orderModel.AddressId);
                     con.Open();
 
@@ -99,8 +98,10 @@ namespace RepositoryLayer.Service
                             OrderId = Convert.ToInt64(dataReader["OrderId"]),
                             UserId = Convert.ToInt64(dataReader["UserId"]),
                             BookId = Convert.ToInt64(dataReader["BookId"]),
-                            CartId = Convert.ToInt64(dataReader["CartId"]),
                             AddressId = Convert.ToInt64(dataReader["AddressId"]),
+                            BookTitle = dataReader["BookTitle"].ToString(),
+                            Author = dataReader["Author"].ToString(),
+                            Image = dataReader["Image"].ToString(),
                             OrderQuantity = Convert.ToInt64(dataReader["OrderQuantity"]),
                             TotalPrice = Convert.ToInt64(dataReader["TotalPrice"]),
                             TotalDiscountedPrice = Convert.ToInt64(dataReader["TotalDiscountedPrice"]),

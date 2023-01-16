@@ -11,8 +11,10 @@ namespace CommonLayer.Model
         public long OrderId { get; set; }
         public long UserId { get; set; }
         public long BookId { get; set; }
-        public long CartId { get; set; }
         public long AddressId { get; set; }
+        public string BookTitle { get; set; }
+        public string Author { get; set; }
+        public string Image { get; set; }
         public long OrderQuantity { get; set; }
         public long TotalPrice { get; set; }
         public long TotalDiscountedPrice { get; set; }

@@ -9,6 +9,7 @@ create table CartTable
 )
 
 select * from CartTable;
+delete CartTable
 
 
 --Create stored Procedure for the Add to cart

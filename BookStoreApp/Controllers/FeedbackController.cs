@@ -3,8 +3,14 @@ using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStoreApp.Controllers
 {
@@ -14,9 +20,15 @@ namespace BookStoreApp.Controllers
     {
         private readonly IFeedbackBL ifeedbackBL;
 
-        public FeedbackController(IFeedbackBL ifeedbackBL)
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
+
+        public FeedbackController(IFeedbackBL ifeedbackBL, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             this.ifeedbackBL = ifeedbackBL;
+            //Added redis catch
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
         }
 
         [Authorize]
@@ -66,6 +78,35 @@ namespace BookStoreApp.Controllers
             {
                 throw;
             }
+        }
+
+        [HttpGet]
+        [Route("Redis")]
+        public async Task<IActionResult> GetAllFeedbackUsingRedisCache()
+        {
+            long userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+
+            var cacheKey = "feedbackList";
+            string serializedFeedbackList;
+            var feedbackList = new List<FeedbackModel>();
+            var redisFeedbackList = await distributedCache.GetAsync(cacheKey);
+            if (redisFeedbackList != null)
+            {
+                serializedFeedbackList = Encoding.UTF8.GetString(redisFeedbackList);
+                feedbackList = JsonConvert.DeserializeObject<List<FeedbackModel>>(serializedFeedbackList);
+            }
+            else
+            {
+                feedbackList = ifeedbackBL.RetriveFeedback(userId).ToList();
+                //bookList = GetFromDb();
+                serializedFeedbackList = JsonConvert.SerializeObject(feedbackList);
+                redisFeedbackList = Encoding.UTF8.GetBytes(serializedFeedbackList);
+                var options = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(10))
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(2));
+                await distributedCache.SetAsync(cacheKey, redisFeedbackList, options);
+            }
+            return Ok(feedbackList);
         }
     }
 }

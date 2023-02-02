@@ -3,8 +3,14 @@ using CommonLayer.Model;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Caching.Distributed;
+using Microsoft.Extensions.Caching.Memory;
+using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace BookStoreApp.Controllers
 {
@@ -13,9 +19,15 @@ namespace BookStoreApp.Controllers
     public class AddressController : ControllerBase
     {
         public readonly IAddressBL iaddressBL;
-        public AddressController(IAddressBL iaddressBL)
+
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
+        public AddressController(IAddressBL iaddressBL, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
             this.iaddressBL= iaddressBL;
+            //Added redis catch
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
         }
 
         [Authorize]
@@ -113,6 +125,35 @@ namespace BookStoreApp.Controllers
 
                 throw e;
             }
+        }
+
+        [HttpGet]
+        [Route("Redis")]
+        public async Task<IActionResult> GetAllAddressUsingRedisCache()
+        {
+            long userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+
+            var cacheKey = "addressList";
+            string serializedAddressList;
+            var addressList = new List<Addressmodel>();
+            var redisAddressList = await distributedCache.GetAsync(cacheKey);
+            if (redisAddressList != null)
+            {
+                serializedAddressList = Encoding.UTF8.GetString(redisAddressList);
+                addressList = JsonConvert.DeserializeObject<List<Addressmodel>>(serializedAddressList);
+            }
+            else
+            {
+                addressList = iaddressBL.RetriveAddress(userId).ToList();
+                //bookList = GetFromDb();
+                serializedAddressList = JsonConvert.SerializeObject(addressList);
+                redisAddressList = Encoding.UTF8.GetBytes(serializedAddressList);
+                var options = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(10))
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(2));
+                await distributedCache.SetAsync(cacheKey, redisAddressList, options);
+            }
+            return Ok(addressList);
         }
 
     }

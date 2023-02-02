@@ -5,6 +5,12 @@ using Microsoft.AspNetCore.Mvc;
 using System.Linq;
 using System;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Caching.Distributed;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace BookStoreApp.Controllers
 {
@@ -13,9 +19,15 @@ namespace BookStoreApp.Controllers
     public class OrderController : ControllerBase
     {
         public readonly IOrderBL iorderBL;
-        public OrderController(IOrderBL iorderBL)
+
+        private readonly IMemoryCache memoryCache;
+        private readonly IDistributedCache distributedCache;
+        public OrderController(IOrderBL iorderBL, IMemoryCache memoryCache, IDistributedCache distributedCache)
         {
-            this.iorderBL = iorderBL;       
+            this.iorderBL = iorderBL;
+            //Added redis catch
+            this.memoryCache = memoryCache;
+            this.distributedCache = distributedCache;
         }
 
         [Authorize]
@@ -88,6 +100,35 @@ namespace BookStoreApp.Controllers
             {
                 throw ex;
             }
+        }
+
+        [HttpGet]
+        [Route("Redis")]
+        public async Task<IActionResult> GetAllOrdersUsingRedisCache()
+        {
+            long userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+
+            var cacheKey = "orderList";
+            string serializedOrderList;
+            var orderList = new List<OrderModel>();
+            var redisOrderList = await distributedCache.GetAsync(cacheKey);
+            if (redisOrderList != null)
+            {
+                serializedOrderList = Encoding.UTF8.GetString(redisOrderList);
+                orderList = JsonConvert.DeserializeObject<List<OrderModel>>(serializedOrderList);
+            }
+            else
+            {
+                orderList = iorderBL.RetriveOrder(userId).ToList();
+                //bookList = GetFromDb();
+                serializedOrderList = JsonConvert.SerializeObject(orderList);
+                redisOrderList = Encoding.UTF8.GetBytes(serializedOrderList);
+                var options = new DistributedCacheEntryOptions()
+                    .SetAbsoluteExpiration(DateTime.Now.AddMinutes(10))
+                    .SetSlidingExpiration(TimeSpan.FromMinutes(2));
+                await distributedCache.SetAsync(cacheKey, redisOrderList, options);
+            }
+            return Ok(orderList);
         }
     }
 }

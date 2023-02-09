@@ -1,5 +1,6 @@
 ﻿using BusinessLayer.Interface;
 using CommonLayer.Model;
+using Microsoft.AspNetCore.Http;
 using RepositoryLayer.Interface;
 using System;
 using System.Collections.Generic;
@@ -75,5 +76,20 @@ namespace BusinessLayer.Service
 				throw;
 			}
 		}
+
+
+        public string ImageBooks(IFormFile image, long bookId)
+        {
+            try
+            {
+                return ibookRL.ImageBooks(image,bookId);
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+        }
     }
 }

@@ -183,5 +183,29 @@ namespace BookStoreApp.Controllers
             }
             return Ok(bookList);
         }
+
+        [HttpPut]
+        [Route("ImageBook")]
+        public IActionResult ImageBooks(IFormFile image, long bookId)
+        {
+            try
+            {
+                //long userId = Convert.ToInt32(User.Claims.FirstOrDefault(e => e.Type == "UserId").Value);
+                var result = ibookBL.ImageBooks(image,bookId);
+                if (result != null)
+
+                {
+                    return this.Ok(new { Success = true, message = "Books Image Uploaded Successfully" });
+                }
+                else
+                {
+                    return this.BadRequest(new { Success = false, message = "Books Image Upload UnSuccessful" });
+                }
+            }
+            catch (Exception)
+            {
+                throw;
+            }
+        }
     }
 }

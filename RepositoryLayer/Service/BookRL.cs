@@ -1,4 +1,6 @@
-﻿using CommonLayer.Model;
+﻿using CloudinaryDotNet;
+using CommonLayer.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using RepositoryLayer.Interface;
 using System;
@@ -6,6 +8,8 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
+using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using static System.Net.Mime.MediaTypeNames;
 
@@ -210,6 +214,50 @@ namespace RepositoryLayer.Service
                     throw;
                 }
             }
+        }
+
+        public string ImageBooks(IFormFile image, long bookId)
+        {
+            try
+            {
+                List<BookModel> bookList = new List<BookModel>();
+                //List<BookModel> bookModels = new List<BookModel> { };
+                //var result = bookModel.FirstOrDefault(x => x.BookId == bookId && x.UserId == userId);
+                var result = bookList.FirstOrDefault(x => x.BookId == bookId);
+                if (result != null)
+                {
+                    Account account = new Account(
+                      this.iconfiguration["CloudinarySettings:CloudName"],
+                      this.iconfiguration["CloudinarySettings:ApiKey"],
+                      this.iconfiguration["CloudinarySettings:ApiSecret"]
+
+                        );
+                    Cloudinary cloudinary = new Cloudinary(account);
+                    var uploadParams = new CloudinaryDotNet.Actions.ImageUploadParams()
+                    {
+                        File = new FileDescription(image.FileName, image.OpenReadStream()),
+                    };
+                    var uploadResult = cloudinary.Upload(uploadParams);
+                    string imagePath = uploadResult.Url.ToString();
+
+                    result.Image = imagePath;
+                    bookList.Add(result);
+                    return "Image Uploaded Successfully";
+
+
+                }
+                else
+                {
+                    return null;
+                }
+
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
         }
     }
 }
